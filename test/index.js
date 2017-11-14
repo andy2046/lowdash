@@ -1,9 +1,4 @@
-# lowdash
-lowdash is a functional JavaScript library including **compose**, **curry**, **identity**, **trace**, **Functor**, **Monad**, and **Applicative**
-
-## Examples
-```js
-const {compose, curry, identity, trace, Functor, Monad, Applicative} = require('lowdash')
+const {compose, curry, identity, trace} = require('../src')
 
 // curry
 
@@ -23,25 +18,25 @@ const map = curry(function(f, ary) {
   return ary.map(f)
 })
 
-match(/\s+/g)('hello world')
+console.log( match(/\s+/g)('hello world') )
 //=> [ ' ' ]
 
 const hasSpaces = match(/\s+/g)
 // function(x) { return x.match(/\s+/g) }
 
-hasSpaces('hello world')
+console.log( hasSpaces('hello world') )
 //=> [ ' ' ]
 
-hasSpaces('spaceless')
+console.log( hasSpaces('spaceless') )
 //=> null
 
-filter(hasSpaces, ['the_spelling', 'te amo'])
+console.log( filter(hasSpaces, ['the_spelling', 'te amo']) )
 //=> ['te amo']
 
 const findSpaces = filter(hasSpaces)
 // function(xs) { return xs.filter(function(x) { return x.match(/\s+/g) }) }
 
-findSpaces(['the_spelling', 'te amo'])
+console.log( findSpaces(['the_spelling', 'te amo']) )
 //=> ['te amo']
 
 const noVowels = replace(/[aeiou]/ig)
@@ -50,7 +45,7 @@ const noVowels = replace(/[aeiou]/ig)
 const censored = noVowels('*')
 // function(x) { return x.replace(/[aeiou]/ig, '*') }
 
-censored('Chocolate Cake')
+console.log( censored('Chocolate Cake') )
 //=> 'Ch*c*l*t* C*k*'
 
 // compose
@@ -59,7 +54,7 @@ const toUpperCase = function(x) { return x.toUpperCase() }
 const exclaim = function(x) { return x + '!' }
 const shout = compose(exclaim, toUpperCase)
 
-shout('angry or hungry')
+console.log( shout('angry or hungry') )
 //=> 'ANGRY OR HUNGRY!'
 
 const reduce = curry(function(f, ary) {
@@ -70,12 +65,12 @@ const head = function(x) { return x[0] }
 const reverse = reduce(function(acc, x) { return [x].concat(acc) })
 const last = compose(head, reverse)
 
-last(['jump', 'house', 'upper'])
+console.log( last(['jump', 'house', 'upper']) )
 //=> 'upper'
 
 const lastUpper = compose(toUpperCase, head, reverse)
 
-lastUpper(['jump', 'house', 'upper'])
+console.log( lastUpper(['jump', 'house', 'upper']) )
 //=> 'UPPER'
 
 // pointfree
@@ -83,7 +78,7 @@ lastUpper(['jump', 'house', 'upper'])
 const toLowerCase = function(x) { return x.toLowerCase() }
 const snakeCase = compose(replace(/\s+/ig, '_'), toLowerCase)
 
-snakeCase('Snake Case')
+console.log( snakeCase('Snake Case') )
 //=> 'snake_case'
 
 const split = curry(function(separator, str) {
@@ -94,7 +89,7 @@ const join = curry(function(separator, ary) {
 })
 const initials = compose(join('. '), map(compose(toUpperCase, head)), split(' '))
 
-initials('json jackson jason')
+console.log( initials('json jackson jason') )
 //=> 'J. J. J'
 
 // debug
@@ -102,56 +97,6 @@ initials('json jackson jason')
 const dasherize = compose(join('-'), map(toLowerCase), trace('after split'),
   split(' '), replace(/\s{2,}/ig, ' '))
 
-dasherize('The world is a  vampire')
+console.log( dasherize('The world is a  vampire') )
 //=> after split [ 'The', 'world', 'is', 'a', 'vampire' ]
 //=> 'the-world-is-a-vampire'
-
-// Functor, Monad, Applicative
-
-const increment = x => x + 1
-const add2 = compose(increment, increment)
-const add4 = compose(add2, add2)
-
-console.log(
-  Functor.of(1)
-    .map(increment)
-    .map(add4)
-)
-
-const incrementMonad = compose(Monad.of, increment)
-const add2Monad = x => Monad.of(x).bind(incrementMonad).bind(incrementMonad)
-const add4Monad = x => Monad.of(x).bind(add2Monad).bind(add2Monad)
-
-console.log(
-  Monad.of(1)
-    .bind(incrementMonad)
-    .bind(add4Monad)
-    .join()
-)
-
-const add = a => b => a + b
-const add2 = add(2)
-
-let left = Applicative.of(add2).ap(Applicative.of(3))
-let right = Applicative.of(3).map(add2)
-
-console.log(
-  left.val === right.val // 5
-)
-
-```
-
-## Installation
-
-```
-npm install --save lowdash
-```
-
-## Usage
-You can import from `lowdash`:
-
-```js
-import {compose, curry, identity, trace, Functor, Monad, Applicative} from 'lowdash';
-// or
-const {compose, curry, identity, trace, Functor, Monad, Applicative} = require('lowdash');
-```
