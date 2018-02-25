@@ -9,5 +9,5 @@ module.exports = function (...funcs) {
     return funcs[0]
   }
 
-  return funcs.reduce((a, b) => (...args) => a(b(...args)))
+  return funcs.reduceRight((a, b) => (...args) => a(b(...args)))
 }

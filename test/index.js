@@ -1,4 +1,4 @@
-const {compose, curry, identity, trace} = require('../src')
+const {compose, curry, pipe, identity, trace, transduce} = require('../src')
 
 // curry
 
@@ -73,6 +73,13 @@ const lastUpper = compose(toUpperCase, head, reverse)
 console.log( lastUpper(['jump', 'house', 'upper']) )
 //=> 'UPPER'
 
+// pipe
+
+const shoutPipe = pipe(exclaim, toUpperCase)
+
+console.log( shoutPipe('angry or hungry') )
+//=> 'ANGRY OR HUNGRY!'
+
 // pointfree
 
 const toLowerCase = function(x) { return x.toLowerCase() }
@@ -91,6 +98,16 @@ const initials = compose(join('. '), map(compose(toUpperCase, head)), split(' ')
 
 console.log( initials('json jackson jason') )
 //=> 'J. J. J'
+
+// transduce =  transform + reduce
+
+const t = curry(transduce)(
+  compose(map(x => x +1), filter(x => x > 2)),
+  (result, x) => result.concat(x),
+  []
+)
+console.log(t([1,2,3,4]))
+//=> [4, 5]
 
 // debug
 

@@ -1,9 +1,9 @@
 # lowdash
-lowdash is a functional JavaScript library including **compose**, **curry**, **identity**, **trace**, **Functor**, **Monad**, and **Applicative**
+lowdash is a functional JavaScript library including **compose**, **pipe**, **curry**, **transduce**, **identity**, **trace**, **Functor**, **Monad**, **Applicative**
 
 ## Examples
 ```js
-const {compose, curry, identity, trace, Functor, Monad, Applicative} = require('lowdash')
+const {compose, curry, pipe, identity, trace, transduce, Functor, Monad, Applicative} = require('lowdash')
 
 // curry
 
@@ -78,6 +78,13 @@ const lastUpper = compose(toUpperCase, head, reverse)
 lastUpper(['jump', 'house', 'upper'])
 //=> 'UPPER'
 
+// pipe
+
+const shoutPipe = pipe(exclaim, toUpperCase)
+
+console.log( shoutPipe('angry or hungry') )
+//=> 'ANGRY OR HUNGRY!'
+
 // pointfree
 
 const toLowerCase = function(x) { return x.toLowerCase() }
@@ -96,6 +103,16 @@ const initials = compose(join('. '), map(compose(toUpperCase, head)), split(' ')
 
 initials('json jackson jason')
 //=> 'J. J. J'
+
+// transduce =  transform + reduce
+
+const t = curry(transduce)(
+  compose(map(x => x +1), filter(x => x > 2)),
+  (result, x) => result.concat(x),
+  []
+)
+console.log(t([1,2,3,4]))
+//=> [4, 5]
 
 // debug
 
@@ -151,7 +168,7 @@ npm install --save lowdash
 You can import from `lowdash`:
 
 ```js
-import {compose, curry, identity, trace, Functor, Monad, Applicative} from 'lowdash';
+import {compose, curry, pipe, identity, trace, transduce, Functor, Monad, Applicative} from 'lowdash';
 // or
-const {compose, curry, identity, trace, Functor, Monad, Applicative} = require('lowdash');
+const {compose, curry, pipe, identity, trace, transduce, Functor, Monad, Applicative} = require('lowdash');
 ```

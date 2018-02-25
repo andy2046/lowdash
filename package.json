@@ -1,7 +1,7 @@
 {
   "name": "lowdash",
-  "version": "1.1.0",
-  "description": "compose curry",
+  "version": "1.2.0",
+  "description": "compose curry pipe transduce",
   "main": "src/index.js",
   "scripts": {
     "test": "node ./test"
@@ -12,7 +12,9 @@
   },
   "keywords": [
     "compose",
-    "curry"
+    "curry",
+    "pipe",
+    "transduce"
   ],
   "author": "AndyP (https://www.npmjs.com/~andy*()",
   "license": "MIT",
